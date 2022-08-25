@@ -152,7 +152,7 @@ const logout = () => {
                 </header>
 
                 <!-- Page Content -->
-                <main>
+                <main class="flex-1 overflow-hidden overflow-y-auto bg-gray-200">
                     <slot />
                 </main>
             </div>
