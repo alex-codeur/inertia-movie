@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use Inertia\Inertia;
-use App\Http\Controllers\Controller;
 use App\Models\TvShow;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class TvShowController extends Controller
 {
@@ -22,5 +24,28 @@ class TvShowController extends Controller
                             ->withQueryString(),
             'filters' => Request::only(['search', 'perPage'])
         ]);
+    }
+
+    public function store()
+    {
+        $tvShow = TvShow::where('tmdb_id', Request::input('tvShowTMDBId'))->first();
+
+        if($tvShow) {
+            return Redirect::back()->with('flash.banner', 'Tv Show Exists.');
+        }
+
+        $tmdb_tv = Http::get(config('services.tmdb.endpoint') . 'tv/' . Request::input('tvShowTMDBId') . '?api_key=' . config('services.tmdb.secret') . '&language=en-US');
+
+        if ($tmdb_tv->successful()) {
+            TvShow::create([
+                'tmdb_id' => $tmdb_tv['id'],
+                'name' => $tmdb_tv['name'],
+                'poster_path' => $tmdb_tv['poster_path'],
+                'created_year' => $tmdb_tv['first_air_date']
+            ]);
+            return Redirect::back()->with('flash.banner', 'Tv Show Created.');
+        } else {
+            return Redirect::back()->with('flash.banner', 'Api Error.');
+        }
     }
 }
