@@ -49,4 +49,29 @@ class GenreController extends Controller
         }
         return Redirect::back()->with('flash.banner', 'Api Error.');
     }
+
+    public function edit(Genre $genre)
+    {
+        return Inertia::render('Genres/Edit', ['genre' => $genre]);
+    }
+
+    public function update(Genre $genre)
+    {
+        $genre->update(Request::validate([
+            'title' => 'required'
+        ]));
+
+        $genre->update([
+            'slug' => Str::slug(Request::input('title'))
+        ]);
+
+        return Redirect::route('admin.genres.index')->with('flash.banner', 'Genre Updated.');
+    }
+
+    public function destroy(Genre $genre)
+    {
+        $genre->delete();
+
+        return Redirect::back()->with('flash.banner', 'Genre Deleted.')->with('flash.bannerStyle', 'danger');
+    }
 }
