@@ -14,6 +14,11 @@ return [
     |
     */
 
+    'tmdb' => [
+        'secret' => env('TMDB_SECRET', 'bfb2c9a9c12d80ebb57b367b8ef10780'),
+        'endpoint' => env('TMDB_ENDPOINT', 'https://api.themoviedb.org/3/'),
+    ],
+
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),
