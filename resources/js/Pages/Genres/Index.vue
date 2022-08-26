@@ -40,7 +40,7 @@
                         </div>
                     </div>
                     <div class="flex">
-                        <select v-model="perPage" @change="getCasts"
+                        <select v-model="perPage" @change="getGenres"
                             class="px-4 py-3 w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0 text-sm">
                             <option value="5">5 Per Page</option>
                             <option value="10">10 Per Page</option>
@@ -60,9 +60,8 @@
                 </template>
 
                 <TableRow v-for="genre in genres.data" :key="genre.id">
-                    <TableData>{{ genre.name }}</TableData>
+                    <TableData>{{ genre.title }}</TableData>
                     <TableData>{{ genre.slug }}</TableData>
-                    <TableData>{{ genre.poster_path }}</TableData>
                     <TableData class="space-x-2">
                         <ButtonLink :link="route('admin.genres.edit', genre.id)">Edit</ButtonLink>
                         <ButtonLink class="bg-red-500 hover:bg-red-700" :link="route('admin.genres.destroy', genre.id)" method="delete" as="button" type="button">Delete</ButtonLink>
@@ -124,9 +123,7 @@ function getGenres() {
 }
 
 function generateGenres() {
-    Inertia.post(
-        '/admin/genres', 
-    );
+    Inertia.post('/admin/genres');
 }
 </script>
 
